@@ -1,25 +1,35 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Container, CssBaseline } from '@mui/material';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import LoginPage from './pages/LoginPage';
+import ProductListPage from './pages/ProductListPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 import logo from './logo.svg';
 import './App.css';
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false, // Evita refetch al cambiar de ventana
+            retry: 1, // Reintentos en caso de error
+        },
+    },
+});
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <Router>
+                <CssBaseline />
+                <Container maxWidth="lg">
+                    <Routes>
+                        <Route path="/" element={<LoginPage />} />
+                        <Route path="/products" element={<ProductListPage />} />
+                        <Route path="/products/:id" element={<ProductDetailPage />} />
+                    </Routes>
+                </Container>
+            </Router>
+        </QueryClientProvider>
+    );
 }
 
 export default App;
