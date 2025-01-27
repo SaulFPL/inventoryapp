@@ -44,8 +44,8 @@ const ProductListPage = () => {
             <Button
                 variant="contained"
                 color="primary"
-                component={Link}
-                to="/products/add"
+                component={Link} // Componente de React Router
+                to="/products/add" // Ruta de destino
                 sx={{ mb: 2 }}
             >
                 Agregar Producto

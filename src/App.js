@@ -4,13 +4,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LoginPage from './pages/LoginPage';
 import ProductListPage from './pages/ProductListPage';
 import ProductDetailPage from './pages/ProductDetailPage';
-import ProtectedRoute from './components/ProtectedRoute'; 
+import ProtectedRoute from './components/ProtectedRoute';
+import AddProductPage from './pages/AddProductPage';
 import './App.css';
 
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            refetchOnWindowFocus: false, 
+            refetchOnWindowFocus: false,
             retry: 1,
         },
     },
@@ -39,6 +40,15 @@ function App() {
                             element={
                                 <ProtectedRoute>
                                     <ProductDetailPage />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        <Route
+                            path="/products/add"
+                            element={
+                                <ProtectedRoute>
+                                    <AddProductPage />
                                 </ProtectedRoute>
                             }
                         />

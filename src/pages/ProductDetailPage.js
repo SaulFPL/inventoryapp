@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
     Box,
     Typography,
@@ -7,13 +7,15 @@ import {
     Alert,
     Card,
     CardContent,
+    Button,
 } from '@mui/material';
 import useProductDetailAPI from '../hooks/useProductDetailApi';
 
 const ProductDetailPage = () => {
     const { id } = useParams(); // Obtiene el productId desde la URL
+    const navigate = useNavigate(); // Para regresar al listado de productos
     const { product, isFetching, error } = useProductDetailAPI(id);
-    console.log(product);
+
     if (isFetching) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
@@ -33,12 +35,12 @@ const ProductDetailPage = () => {
     }
 
     return (
-        <Box sx={{ mt: 4 }}>
+        <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Typography variant="h4" gutterBottom>
                 Detalle del Producto
             </Typography>
             {product ? (
-                <Card>
+                <Card sx={{ maxWidth: 500, boxShadow: 3, borderRadius: 2 }}>
                     <CardContent>
                         <Typography variant="h6">ID: {product.productId}</Typography>
                         <Typography variant="h6">Código: {product.productCode}</Typography>
@@ -56,6 +58,16 @@ const ProductDetailPage = () => {
             ) : (
                 <Alert severity="info">No se encontró el producto.</Alert>
             )}
+
+            {/* Botón para regresar al listado */}
+            <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 3 }}
+                onClick={() => navigate('/products')}
+            >
+                Regresar al Listado
+            </Button>
         </Box>
     );
 };
