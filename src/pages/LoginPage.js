@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react';
 import {
     Container,
     TextField,
@@ -9,17 +8,11 @@ import {
     Alert,
     CircularProgress,
 } from '@mui/material';
-import useLoginAPI from '../hooks/useLoginApi';
+import useLoginApi from '../hooks/useLoginApi';
 
 const LoginPage = () => {
-    const navigate = useNavigate();
-    const [user, setUser] = useState('')
-    const [password, setPassword] = useState('')
     const [credentials, setCredentials] = useState({ username: '', password: '' });
-
-    const {user: userData, isFetching, error } = useLoginAPI({
-        username: user, password: password
-    });
+    const { login, isFetching, error } = useLoginApi();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,15 +20,9 @@ const LoginPage = () => {
     };
 
     const handleSubmit = (e) => {
-        console.log(credentials)
         e.preventDefault();
-        setUser(credentials.username);
-        setPassword(credentials.password)
+        login(credentials); 
     };
-
-    if (userData) {
-        navigate('/products');
-    }
 
     return (
         <Container maxWidth="sm" sx={{ mt: 8 }}>
@@ -61,10 +48,6 @@ const LoginPage = () => {
                     </Alert>
                 )}
 
-                {userData && (
-                    <Alert severity="success">¡Inicio de sesión exitoso! Bienvenido, {userData?.username}</Alert>
-                )}
-
                 <TextField
                     label="Nombre"
                     name="username"
@@ -75,7 +58,7 @@ const LoginPage = () => {
                 />
 
                 <TextField
-                    label="Telefono"
+                    label="Teléfono"
                     name="password"
                     type="password"
                     value={credentials.password}
@@ -98,4 +81,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage
+export default LoginPage;

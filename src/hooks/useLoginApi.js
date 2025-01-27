@@ -1,21 +1,39 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const useLoginApi = ({ username, password }) => {
-    const { isFetching, error, data: response } = useQuery({
-        queryKey: [username, password],
-        queryFn: () => axios.get(`https://localhost:7103/User/login?userName=${username}&userPhone=${password}`),
-        enabled: !!username && !!password,
+const useLoginApi = () => {
+    const navigate = useNavigate(); 
+    const {
+        mutate: login,
+        isLoading: isFetching,
+        error,
+        data: response,
+    } = useMutation({
+        mutationFn: async ({ username, password }) => {
+            const res = await axios.post('https://localhost:7103/User/login', {
+                userName: username,
+                userPhone: password,
+            });
+
+            return res.data;
+        },
+        onSuccess: (data) => {
+            if (data?.token) {
+                localStorage.setItem('token', data.token);
+                navigate('/products');
+            }
+        },
     });
 
     let user = null;
-    console.log(response)
-    if (response?.data) {
+    if (response) {
         user = {
-            ...response.data
+            ...response,
         };
     }
-    return { user, error, isFetching };
+
+    return { login, user, error, isFetching };
 };
 
 export default useLoginApi;

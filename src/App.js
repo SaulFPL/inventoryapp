@@ -4,13 +4,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LoginPage from './pages/LoginPage';
 import ProductListPage from './pages/ProductListPage';
 import ProductDetailPage from './pages/ProductDetailPage';
-import logo from './logo.svg';
+import ProtectedRoute from './components/ProtectedRoute'; 
 import './App.css';
+
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            refetchOnWindowFocus: false, // Evita refetch al cambiar de ventana
-            retry: 1, // Reintentos en caso de error
+            refetchOnWindowFocus: false, 
+            retry: 1,
         },
     },
 });
@@ -23,8 +24,24 @@ function App() {
                 <Container maxWidth="lg">
                     <Routes>
                         <Route path="/" element={<LoginPage />} />
-                        <Route path="/products" element={<ProductListPage />} />
-                        <Route path="/products/:id" element={<ProductDetailPage />} />
+
+                        {/* Rutas protegidas */}
+                        <Route
+                            path="/products"
+                            element={
+                                <ProtectedRoute>
+                                    <ProductListPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/products/:id"
+                            element={
+                                <ProtectedRoute>
+                                    <ProductDetailPage />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Routes>
                 </Container>
             </Router>
